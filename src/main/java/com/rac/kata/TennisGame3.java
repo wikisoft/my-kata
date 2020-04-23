@@ -1,42 +1,56 @@
 package com.rac.kata;
 
+import java.util.List;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+
+import static com.rac.kata.GameUtils.*;
+
 /**
  * Tennis game 3.
  */
+@Builder
+@AllArgsConstructor
 public class TennisGame3 implements TennisGame {
 
-    private int p2;
     private int p1;
-    private String p1N;
-    private String p2N;
+    private int p2;
+    private final String p1N;
+    private final String p2N;
 
-    public TennisGame3(String p1N, String p2N) {
-        this.p1N = p1N;
-        this.p2N = p2N;
-    }
-
+    /**
+     * Get Score.
+     *
+     * @return The final score.
+     */
+    @Override
     public String getScore() {
-        String s;
-        if (p1 < 4 && p2 < 4 && !(p1 + p2 == 6)) {
-            String[] p = new String[]{ "Love", "Fifteen", "Thirty", "Forty" };
-            s = p[p1];
-            return (p1 == p2) ? s + "-All" : s + "-" + p[p2];
-        } else {
+
+        if (p1 < 4 && p2 < 4 && (p1 + p2 != 6)) {
+            var scoreList = List.of(LOVE, FIFTEEN, THIRTY, FORTY);
+            var score = scoreList.get(p1);
+
             if (p1 == p2) {
-                return "Deuce";
+                return score + ALL;
             }
-            s = p1 > p2 ? p1N : p2N;
-            return ((p1 - p2) * (p1 - p2) == 1) ? "Advantage " + s : "Win for " + s;
+            return score + HYPHEN + scoreList.get(p2);
         }
+
+        if (p1 == p2) {
+            return DEUCE;
+        }
+
+        var score = p1 > p2 ? p1N : p2N;
+        return ((p1 - p2) * (p1 - p2) == 1) ? ADVANTAGE + score : WIN_FOR + score;
     }
 
     public void wonPoint(String playerName) {
-        if (playerName == "player1") {
-            this.p1 += 1;
+        if (PLAYER_1.equals(playerName)) {
+            this.p1++;
         } else {
-            this.p2 += 1;
+            this.p2++;
         }
-
     }
 
 }

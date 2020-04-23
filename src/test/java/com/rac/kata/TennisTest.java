@@ -102,7 +102,10 @@ public class TennisTest {
 
     @Test
     public void checkAllScoresTennisGame3() {
-        TennisGame3 game = new TennisGame3(PLAYER_1, PLAYER_2);
+        TennisGame3 game = TennisGame3.builder()
+                .p1N(PLAYER_1)
+                .p2N(PLAYER_2)
+                .build();
         checkAllScores(game);
     }
 
