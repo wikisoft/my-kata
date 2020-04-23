@@ -22,4 +22,5 @@ public final class GameUtils {
     public static final String FORTY = "Forty";
     public static final String DEUCE = "Deuce";
 
+    public static final String NOT_SUPPORTED = "Not supported";
 }

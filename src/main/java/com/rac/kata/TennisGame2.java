@@ -1,146 +1,100 @@
 package com.rac.kata;
 
+import java.util.List;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+
+import static com.rac.kata.GameUtils.*;
+
 /**
  * Tennis game 2.
  */
+@Builder
+@AllArgsConstructor
 public class TennisGame2 implements TennisGame {
-    public int P1point = 0;
-    public int P2point = 0;
 
-    public String P1res = "";
-    public String P2res = "";
-    private String player1Name;
-    private String player2Name;
+    private int p1Point;
+    private int p2Point;
+    private final String player1Name;
+    private final String player2Name;
 
-    public TennisGame2(String player1Name, String player2Name) {
-        this.player1Name = player1Name;
-        this.player2Name = player2Name;
-    }
-
-    public String getScore() {
-        String score = "";
-        if (P1point == P2point && P1point < 4) {
-            if (P1point == 0) {
-                score = "Love";
-            }
-            if (P1point == 1) {
-                score = "Fifteen";
-            }
-            if (P1point == 2) {
-                score = "Thirty";
-            }
-            score += "-All";
-        }
-        if (P1point == P2point && P1point >= 3) {
-            score = "Deuce";
-        }
-
-        if (P1point > 0 && P2point == 0) {
-            if (P1point == 1) {
-                P1res = "Fifteen";
-            }
-            if (P1point == 2) {
-                P1res = "Thirty";
-            }
-            if (P1point == 3) {
-                P1res = "Forty";
-            }
-
-            P2res = "Love";
-            score = P1res + "-" + P2res;
-        }
-        if (P2point > 0 && P1point == 0) {
-            if (P2point == 1) {
-                P2res = "Fifteen";
-            }
-            if (P2point == 2) {
-                P2res = "Thirty";
-            }
-            if (P2point == 3) {
-                P2res = "Forty";
-            }
-
-            P1res = "Love";
-            score = P1res + "-" + P2res;
-        }
-
-        if (P1point > P2point && P1point < 4) {
-            if (P1point == 2) {
-                P1res = "Thirty";
-            }
-            if (P1point == 3) {
-                P1res = "Forty";
-            }
-            if (P2point == 1) {
-                P2res = "Fifteen";
-            }
-            if (P2point == 2) {
-                P2res = "Thirty";
-            }
-            score = P1res + "-" + P2res;
-        }
-        if (P2point > P1point && P2point < 4) {
-            if (P2point == 2) {
-                P2res = "Thirty";
-            }
-            if (P2point == 3) {
-                P2res = "Forty";
-            }
-            if (P1point == 1) {
-                P1res = "Fifteen";
-            }
-            if (P1point == 2) {
-                P1res = "Thirty";
-            }
-            score = P1res + "-" + P2res;
-        }
-
-        if (P1point > P2point && P2point >= 3) {
-            score = "Advantage player1";
-        }
-
-        if (P2point > P1point && P1point >= 3) {
-            score = "Advantage player2";
-        }
-
-        if (P1point >= 4 && P2point >= 0 && (P1point - P2point) >= 2) {
-            score = "Win for player1";
-        }
-        if (P2point >= 4 && P1point >= 0 && (P2point - P1point) >= 2) {
-            score = "Win for player2";
-        }
-        return score;
-    }
-
-    public void SetP1Score(int number) {
-
-        for (int i = 0; i < number; i++) {
-            P1Score();
-        }
-
-    }
-
-    public void SetP2Score(int number) {
-
-        for (int i = 0; i < number; i++) {
-            P2Score();
-        }
-
-    }
-
-    public void P1Score() {
-        P1point++;
-    }
-
-    public void P2Score() {
-        P2point++;
-    }
-
+    @Override
     public void wonPoint(String player) {
-        if (player == "player1") {
-            P1Score();
+        if (PLAYER_1.equals(player)) {
+            p1Point++;
         } else {
-            P2Score();
+            p2Point++;
         }
+    }
+
+    /**
+     * Get Score.
+     *
+     * @return The final score.
+     */
+    @Override
+    public String getScore() {
+
+        var scoreList = List.of(LOVE, FIFTEEN, THIRTY, FORTY);
+
+        if (p1Point == p2Point) {
+            return p1Point < 3 ? scoreList.get(p1Point) + ALL : DEUCE;
+        }
+
+        if (p1Point > 0 && p1Point < 4 && p2Point == 0) {
+            return scoreList.get(p1Point) + HYPHEN + LOVE;
+        }
+
+        if (p2Point > 0 && p2Point < 4 && p1Point == 0) {
+            return LOVE + HYPHEN + scoreList.get(p2Point);
+        }
+
+        if (p1Point > p2Point && p1Point < 4) {
+            var p1Res = List.of(2, 3).contains(p1Point) ? scoreList.get(p1Point) : null;
+            var p2Res = List.of(1, 2).contains(p2Point) ? scoreList.get(p2Point) : null;
+            if (p1Res != null && p2Res != null) {
+                return p1Res + HYPHEN + p2Res;
+            }
+        }
+
+        if (p2Point > p1Point && p2Point < 4) {
+            var p1Res = List.of(1, 2).contains(p1Point) ? scoreList.get(p1Point) : null;
+            var p2Res = List.of(2, 3).contains(p2Point) ? scoreList.get(p2Point) : null;
+            if (p1Res != null && p2Res != null) {
+                return p1Res + HYPHEN + p2Res;
+            }
+        }
+
+        return processWinner(p1Point, p2Point);
+    }
+
+    /**
+     * Process winner player.
+     *
+     * @param p1Point The P1 point.
+     * @param p2Point The P2 point.
+     *
+     * @return the winner score.
+     */
+    private static String processWinner(int p1Point, int p2Point) {
+        var score  = NOT_SUPPORTED;
+        if (p1Point > p2Point && p2Point >= 3) {
+            score = ADVANTAGE + PLAYER_1;
+        }
+
+        if (p2Point > p1Point && p1Point >= 3) {
+            score = ADVANTAGE + PLAYER_2;
+        }
+
+        if (p1Point >= 4 && p2Point >= 0 && (p1Point - p2Point) >= 2) {
+            score = WIN_FOR + PLAYER_1;
+        }
+
+        if (p2Point >= 4 && p1Point >= 0 && (p2Point - p1Point) >= 2) {
+            score = WIN_FOR + PLAYER_2;
+        }
+
+        return score;
     }
 }

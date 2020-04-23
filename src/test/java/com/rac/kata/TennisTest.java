@@ -93,7 +93,10 @@ public class TennisTest {
 
     @Test
     public void checkAllScoresTennisGame2() {
-        TennisGame2 game = new TennisGame2(PLAYER_1, PLAYER_2);
+        TennisGame2 game = TennisGame2.builder()
+                .player1Name(PLAYER_1)
+                .player2Name(PLAYER_2)
+                .build();
         checkAllScores(game);
     }
 
