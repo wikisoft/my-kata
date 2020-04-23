@@ -1,0 +1,16 @@
+plugins {
+	id 'java'
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	compileOnly 			group: 'org.projectlombok',			name: 'lombok',					version: property('lombok.version')
+	annotationProcessor 	group: 'org.projectlombok',  		name: 'lombok',					version: property('lombok.version')
+
+	testCompile 			group: 'junit', 					name: 'junit', 					version: property('junit.version')
+	testImplementation  	group: 'org.projectlombok',         name: 'lombok',					version: property('lombok.version')
+	testAnnotationProcessor group: 'org.projectlombok',  		name: 'lombok',					version: property('lombok.version')
+}
