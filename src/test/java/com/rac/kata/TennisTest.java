@@ -1,6 +1,6 @@
 package com.rac.kata;
 
-import static com.rac.kata.Constants.*;
+import static com.rac.kata.GameUtils.*;
 import static org.junit.Assert.*;
 
 import java.util.Arrays;
@@ -42,6 +42,9 @@ public class TennisTest {
                 { 4, 0, "Win for player1"},
                 { 0, 4, "Win for player2"},
 
+                { 6, 3, "Win for player1"},
+                { 3, 6, "Win for player2"},
+
                 { 2, 1, "Thirty-Fifteen"},
                 { 1, 2, "Fifteen-Thirty"},
                 { 3, 1, "Forty-Fifteen"},
@@ -81,7 +84,10 @@ public class TennisTest {
 
     @Test
     public void checkAllScoresTennisGame1() {
-        TennisGame1 game = new TennisGame1("player1", "player2");
+        TennisGame1 game = TennisGame1.builder()
+                .player1Name(PLAYER_1)
+                .player2Name(PLAYER_2)
+                .build();
         checkAllScores(game);
     }
 

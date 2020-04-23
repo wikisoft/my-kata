@@ -1,82 +1,100 @@
 package com.rac.kata;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+
+import static com.rac.kata.GameUtils.*;
+
 /**
  * Tennis game 1.
  */
+@Builder
+@AllArgsConstructor
 public class TennisGame1 implements TennisGame {
 
-    private int m_score1 = 0;
-    private int m_score2 = 0;
-    private String player1Name;
-    private String player2Name;
+    private int mScore1;
+    private int mScore2;
+    private final String player1Name;
+    private final String player2Name;
 
-    public TennisGame1(String player1Name, String player2Name) {
-        this.player1Name = player1Name;
-        this.player2Name = player2Name;
-    }
-
+    @Override
     public void wonPoint(String playerName) {
-        if (playerName == "player1") {
-            m_score1 += 1;
+        if (PLAYER_1.equals(playerName)) {
+            mScore1++;
         } else {
-            m_score2 += 1;
+            mScore2++;
         }
     }
 
+    /**
+     * Get Score.
+     *
+     * @return The final score.
+     */
+    @Override
     public String getScore() {
-        String score = "";
-        int tempScore = 0;
-        if (m_score1 == m_score2) {
-            switch (m_score1) {
-                case 0:
-                    score = "Love-All";
-                    break;
-                case 1:
-                    score = "Fifteen-All";
-                    break;
-                case 2:
-                    score = "Thirty-All";
-                    break;
-                default:
-                    score = "Deuce";
-                    break;
 
+        if (mScore1 == mScore2) {
+            if (mScore1 >= 3) {
+                return DEUCE;
             }
-        } else if (m_score1 >= 4 || m_score2 >= 4) {
-            int minusResult = m_score1 - m_score2;
-            if (minusResult == 1) {
-                score = "Advantage player1";
-            } else if (minusResult == -1) {
-                score = "Advantage player2";
-            } else if (minusResult >= 2) {
-                score = "Win for player1";
-            } else {
-                score = "Win for player2";
-            }
-        } else {
-            for (int i = 1; i < 3; i++) {
-                if (i == 1) {
-                    tempScore = m_score1;
-                } else {
-                    score += "-";
-                    tempScore = m_score2;
-                }
-                switch (tempScore) {
-                    case 0:
-                        score += "Love";
-                        break;
-                    case 1:
-                        score += "Fifteen";
-                        break;
-                    case 2:
-                        score += "Thirty";
-                        break;
-                    case 3:
-                        score += "Forty";
-                        break;
-                }
-            }
+            return processScore(mScore1) + ALL;
         }
-        return score;
+
+        if (mScore1 >= 4 || mScore2 >= 4) {
+            return processBigScores(mScore1, mScore2);
+        }
+
+        return processScore(mScore1) +
+                HYPHEN +
+                processScore(mScore2);
+    }
+
+    /**
+     * Process player score.
+     *
+     * @param score score.
+     *
+     * @return The score.
+     */
+    private static String processScore(int score) {
+        switch (score) {
+            case 0:
+                return LOVE;
+            case 1:
+                return FIFTEEN;
+            case 2:
+                return THIRTY;
+            case 3:
+                return FORTY;
+            default:
+                return NOT_SUPPORTED;
+        }
+    }
+
+    /**
+     * Process scores when higher than 3.
+     *
+     * @param score1 Score 1
+     * @param score2 Score 2
+     *
+     * @return The winner.
+     */
+    private static String processBigScores(int score1, int score2) {
+        int minusResult = score1 - score2;
+
+        if (minusResult == 1) {
+            return ADVANTAGE + PLAYER_1;
+        }
+
+        if (minusResult == -1) {
+            return ADVANTAGE + PLAYER_2;
+        }
+
+        if (minusResult >= 2) {
+            return WIN_FOR + PLAYER_1;
+        }
+
+        return WIN_FOR + PLAYER_2;
     }
 }
