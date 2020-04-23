@@ -10,7 +10,8 @@ dependencies {
 	compileOnly 			group: 'org.projectlombok',			name: 'lombok',					version: property('lombok.version')
 	annotationProcessor 	group: 'org.projectlombok',  		name: 'lombok',					version: property('lombok.version')
 
-	testCompile 			group: 'junit', 					name: 'junit', 					version: property('junit.version')
+	testCompile 			group: 'org.junit.jupiter', 		name: 'junit-jupiter-api', 		version: property('junit.version')
+	testCompile 			group: 'org.junit.jupiter',			name: 'junit-jupiter-params',	version: property('junit.version')
 	testImplementation  	group: 'org.projectlombok',         name: 'lombok',					version: property('lombok.version')
 	testAnnotationProcessor group: 'org.projectlombok',  		name: 'lombok',					version: property('lombok.version')
 }
