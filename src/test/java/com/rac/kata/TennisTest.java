@@ -1,9 +1,11 @@
+package com.rac.kata;
+
+import static com.rac.kata.Constants.*;
 import static org.junit.Assert.*;
 
 import java.util.Arrays;
 import java.util.Collection;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -21,7 +23,7 @@ public class TennisTest {
         this.player2Score = player2Score;
         this.expectedScore = expectedScore;
     }
-    
+
     @Parameters
     public static Collection<Object[]> getAllScores() {
         return Arrays.asList(new Object[][] {
@@ -30,7 +32,7 @@ public class TennisTest {
                 { 2, 2, "Thirty-All"},
                 { 3, 3, "Deuce"},
                 { 4, 4, "Deuce"},
-                
+
                 { 1, 0, "Fifteen-Love"},
                 { 0, 1, "Love-Fifteen"},
                 { 2, 0, "Thirty-Love"},
@@ -39,7 +41,7 @@ public class TennisTest {
                 { 0, 3, "Love-Forty"},
                 { 4, 0, "Win for player1"},
                 { 0, 4, "Win for player2"},
-                
+
                 { 2, 1, "Thirty-Fifteen"},
                 { 1, 2, "Fifteen-Thirty"},
                 { 3, 1, "Forty-Fifteen"},
@@ -51,7 +53,7 @@ public class TennisTest {
                 { 2, 3, "Thirty-Forty"},
                 { 4, 2, "Win for player1"},
                 { 2, 4, "Win for player2"},
-                
+
                 { 4, 3, "Advantage player1"},
                 { 3, 4, "Advantage player2"},
                 { 5, 4, "Advantage player1"},
@@ -70,9 +72,9 @@ public class TennisTest {
         int highestScore = Math.max(this.player1Score, this.player2Score);
         for (int i = 0; i < highestScore; i++) {
             if (i < this.player1Score)
-                game.wonPoint("player1");
+                game.wonPoint(PLAYER_1);
             if (i < this.player2Score)
-                game.wonPoint("player2");
+                game.wonPoint(PLAYER_2);
         }
         assertEquals(this.expectedScore, game.getScore());
     }
@@ -85,13 +87,13 @@ public class TennisTest {
 
     @Test
     public void checkAllScoresTennisGame2() {
-        TennisGame2 game = new TennisGame2("player1", "player2");
+        TennisGame2 game = new TennisGame2(PLAYER_1, PLAYER_2);
         checkAllScores(game);
     }
 
     @Test
     public void checkAllScoresTennisGame3() {
-        TennisGame3 game = new TennisGame3("player1", "player2");
+        TennisGame3 game = new TennisGame3(PLAYER_1, PLAYER_2);
         checkAllScores(game);
     }
 

@@ -1,4 +1,8 @@
+package com.rac.kata;
 
+/**
+ * Tennis game 1.
+ */
 public class TennisGame1 implements TennisGame {
 
     private int m_score1 = 0;
